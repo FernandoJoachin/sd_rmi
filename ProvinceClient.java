@@ -1,6 +1,7 @@
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ProvinceClient {
     public static void main(String[] args) {
@@ -10,6 +11,34 @@ public class ProvinceClient {
             //Lookup server object
             IRemoteProvince rp = (IRemoteProvince) registry.lookup("Province");
 
+            // Solicitar y leer el nombre de la ciudad desde teclado
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Ingrese el nombre de la ciudad: ");
+            String cityName = scanner.nextLine();
+
+            System.out.print("Ingrese el nombre corto (3 caracteres): ");
+            String shortName = scanner.nextLine();
+
+            // Insertar la ciudad en la base de datos
+            Province newCity = new Province(0, shortName, cityName);
+            int result = rp.save(newCity);
+
+            if (result > 0) {
+                System.out.println("Ciudad agregada exitosamente.");
+            } else {
+                System.out.println("Error al agregar la ciudad.");
+            }
+
+            // Desplegar la lista de ciudades existentes
+            System.out.println("Lista de ciudades existentes:");
+            ArrayList<Province> arrProv = rp.findAll();
+            for (Province p : arrProv) {
+                System.out.println(p.toString());
+            }
+
+            scanner.close();
+
+            /*
             //Save province
             Province mid = new Province(1, "MID", "Mérida");
             Province ens = new Province(2, "ENS", "Ensenada");
@@ -24,6 +53,7 @@ public class ProvinceClient {
             rp.save(cdmx);
             rp.save(cam);
             rp.save(mty);
+            */
 
             //Update province
             /* System.out.println("Update Campeches to Campeche");

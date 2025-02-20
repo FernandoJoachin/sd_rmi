@@ -18,19 +18,22 @@ public final class DBManager {
     public Connection getConnection() { return _con; }
 
     private static Connection getMySQLConnection() {
+
         Connection con = null;
+        
         try {
-            String strCon = "jdbc:mysql://localhost:3306/Province?user=root&password=&useSSL=false&serverTimezone=America/Mexico_City";
-            con = DriverManager.getConnection(strCon, "root", "");
-            if (con != null) {
-                System.out.println("¡Conexión exitosa a MySQL!");
-            } else {
-                System.out.println("Error: la conexión a MySQL es NULL.");
-            }
+            String url = "jdbc:mysql://127.0.0.1/Province?user=rtuser&password=123";
+            System.out.println("Intentando conectar a MySQL en: " + url);
+    
+            con = DriverManager.getConnection(url);
+            System.out.println("✅ Conexión a MySQL exitosa.");
         } catch (SQLException se) {
-            System.out.println(se);
-            se.printStackTrace();
+            System.out.println("❌ Error de conexión a MySQL: " + se.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Error general: " + e.getMessage());
         }
         return con;
     }
+    
+    
 }

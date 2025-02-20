@@ -6,20 +6,31 @@ public class ProvinceRepository {
         int iRet = -1;
         try {
             Connection con = DBManager.getInstance().getConnection();
-            String SQL = "INSERT INTO Province (Id, ShortName, Name) values(?,?,?)";
-            
+            if (con == null) {  // <-- Depuración
+                System.out.println("Error: La conexión a la base de datos es nula.");
+                return iRet;
+            }
+    
+            System.out.println("Insertando ciudad: " + p.getName() + " con nombre corto: " + p.getShortName());
+    
+            String SQL = "INSERT INTO Province (ShortName, Name) VALUES(?, ?)";
             PreparedStatement pstmt = con.prepareStatement(SQL);
-            pstmt.setInt(1, p.getId());
-            pstmt.setString(2, p.getShortName());
-            pstmt.setString(3, p.getName());
-
+            pstmt.setString(1, p.getShortName());
+            pstmt.setString(2, p.getName());
+    
             iRet = pstmt.executeUpdate();
+            System.out.println("Inserción exitosa.");
+            
             pstmt.close();
         } catch (SQLException se) {
-            System.out.println(se);
+            System.out.println("Error SQL: " + se.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error general: " + e.getMessage());
         }
         return iRet;
     }
+    
+    
     
     public static int update(Province p) {
         int iRet = -1;
